@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
+    <title>Task App</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <header>
+    <header> class="header">
        <h1>  Task Manager</h1>
     </header>
 
-    <div class="container">
+    <div class="layout">
 
-        <aside>
+        <aside> class="sidebar">
             <h2>Categorías</h2>
             <ul>
                 <li>Trabajo</li>
@@ -23,25 +23,26 @@
             </ul>
         </aside>
 
-        <main>
+        <main> class="main-content">
             <section class="task-list">
+                <h2>Mis Tareas</h2>
 
-                <div class="task-card high">
-                    <h3>Diseñar landing page</h3>
-                    <span class="category">Trabajo</span>
-                    <span class="badge">Alta</span>
+                <div class="task-card">
+                    <span class="task-title">Diseñar mockup</span>
+                    <span class="task-category">Trabajo</span>
+                    <span class="badge high">Alta</span>
                 </div>
 
-                <div class="task-card medium">
-                    <h3>Estudiar CSS Grid</h3>
-                    <span class="category">Estudio</span>
-                    <span class="badge">Media</span>
+                <div class="task-card">
+                    <spann class="task-title">Estudiar CSS Grid</span>
+                    <span class="task-category">Estudio</span>
+                    <span class="badge medium">Media</span>
                 </div>
 
-                <div class="task-card low">
-                    <h3>Hacer ejercicio</h3>
-                    <span class="category">Personal</span>
-                    <span class="badge">Baja</span>                    
+                <div class="task-card">
+                    <spann class="task-title">Comprar viveres</span>
+                    <span class="task-category">Personal</span>
+                    <span class="badge low">Baja</span>                    
                 </div>
 
             </section>
