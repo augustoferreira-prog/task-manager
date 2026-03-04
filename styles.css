@@ -1,7 +1,7 @@
 :root {
     --primary: #4f46e5;
     --background: #f3f4f6;
-    --card-bg: #;
+    --card-bg: #ffffff;
     --text: #1f2937;
     --high: #ef4444;
     --medium: #f59e0b;
@@ -36,6 +36,12 @@ header {
 .container {
     display:flex;
     min-height: 100vh;
+}
+
+aside {
+    width: 250px;
+    background: #e5e7eb;
+    padding: var(--spacing);   
 }
 
 aside ul {
