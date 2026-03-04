@@ -1,6 +1,6 @@
 :root {
     --color-primary: #4f46e5;
-    --color-bg: #f4f6f9;
+    --color-bg: hsl(199, 84%, 60%);
     --color-card: #ffffff;
     --color-text: #333;
     --color-high: #ef4444;
@@ -24,11 +24,12 @@ body {
 }       
 
 /* Header */
-.header {
+.header {    
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: var(--color-primary);
     color: white;
-    padding: var(--spacing-md);
-    text-align: center;
 }
 
 /* Layout */
