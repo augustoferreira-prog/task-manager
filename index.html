@@ -2,53 +2,39 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task App</title>
+    <title>Task List</title>
     <link rel="stylesheet" href="styles.css">
-</head>
+</head>    
 <body>  
-   
-    <header> 
-       <h1>Task Manager Augusto Ferreira</h1>
-    </header>   
-
-    <div class="container">
-
-        <aside>
-            <h2>Categorías</h2>
-            <ul>
-                <li>Trabajo</li>
-                <li>Estudio</li>
-                <li>Personal</li>        
-            </ul>
-        </aside>
-
-        <main> 
-            <section class="task-section">
-                <h2>Lista de Tareas</h2>
-
-                <div class="task-card">
-                    <span class="task-title">Maquetar app</span>
-                    <span class="task-category">(Trabajo)</span>
-                    <span class="badge high">Prioridad alta</span>
-                </div>
-
-                <div class="task-card">
-                    <span class="task-title">Subir proyecto a GitHub</span>
-                    <span class="task-category">(Desarrollo)</span>
-                    <span class="badge medium">Prioridad media</span>
-                </div>
-
-                <div class="task-card">
-                    <span class="task-title">Conectar con Vercel</span>
-                    <span class="task-category">(Deploy)</span>
-                    <span class="badge low">Prioridad baja</span>                    
-                </div>
-
-            </section>
-        </main>
-
-    </div>
-    
+    <header class="header">
+        <h1>Taller de Chapa y pintura AAFF</h1>
+    </header>  
+    <main class="main">
+            <section class="section">
+            <h2>Bienvenido a tu gestor personal</h2>
+            <p>Aquí puedes elegir las opciones que se adapten a</p>
+            <p>tus exigencias de manera eficiente.</p>                 
+        </section>
+        <aside class="aside">
+            <h2>Además no olvides consultar...</h2>
+        </aside>  
+        <div class="sidebar">
+            <h2>Ofertas especiales</h2>
+            <p>¡Aprovecha nuestras ofertas exclusivas en servicios de reparación!</p>
+            <p>Descuentos especiales para clientes frecuentes!!!!!</p>
+            <p>¡Consulta nuestras promociones mensuales!</p>
+        </div>
+        <div class="container">
+            <h1>Reparaciones a realizar</h1>
+            <div class="form-group">        
+                <input type="text" id="taskInput" placeholder="Agregar tareas...">
+                <button id="addTaskBtn">Añadir</button>
+            </div>
+            <ul id="taskList"></ul>
+        </div>               
+    </main>    
+    <script src="app.js"></script>    
 </body>
 </html>
