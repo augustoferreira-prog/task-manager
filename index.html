@@ -1,40 +1,71 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task List</title>
-    <link rel="stylesheet" href="styles.css">
-</head>    
-<body>  
-    <header class="header">
-        <h1>Taller de Chapa y pintura AAFF</h1>
-    </header>  
-    <main class="main">
-            <section class="section">
-            <h2>Bienvenido a tu gestor personal</h2>
-            <p>Aquí puedes elegir las opciones que se adapten a</p>
-            <p>tus exigencias de manera eficiente.</p>                 
-        </section>
-        <aside class="aside">
-            <h2>Además no olvides consultar...</h2>
-        </aside>  
-        <div class="sidebar">
-            <h2>Ofertas especiales</h2>
-            <p>¡Aprovecha nuestras ofertas exclusivas en servicios de reparación!</p>
-            <p>Descuentos especiales para clientes frecuentes!!!!!</p>
-            <p>¡Consulta nuestras promociones mensuales!</p>
-        </div>
-        <div class="container">
-            <h1>Reparaciones a realizar</h1>
-            <div class="form-group">        
-                <input type="text" id="taskInput" placeholder="Agregar tareas...">
-                <button id="addTaskBtn">Añadir</button>
-            </div>
-            <ul id="taskList"></ul>
-        </div>               
-    </main>    
-    <script src="app.js"></script>    
+    <title>Gestor de Tareas</title>
+    <link rel="stylesheet" href="styles.css"> 
+    
+</head>
+
+<body>
+
+<header class="header">
+    
+<h1>📋Gestor de Tareas</h1>
+
+<button id="toggleTheme">🌙</button>
+
+</header>
+
+<div class="container">
+
+<aside class="sidebar">
+
+<h3>Categorías</h3>
+
+<ul>
+    <li><span>📌</span> Personal</li>
+    <li><span>💼</span> Trabajo</li>
+    <li><span>📚</span> Estudio</li>
+</ul>
+
+</aside>
+
+<main class="main">
+
+<section class="task-panel">
+
+<h2>Mis tareas</h2>
+
+<p id="taskCounter"></p>
+
+<form id="taskForm">
+
+<input type="text" id="taskInput" placeholder="Nueva tarea" required>
+
+<select id="prority">
+<option value="Alta">Alta</option>
+<option value="Media">Media</option>
+<option value="Baja">Baja</option>
+</select>
+
+<button type="submit">Añadir</button>
+
+</form>
+
+<input type=""text" id="searchTask" placeholder="Buscar tarea..."
+
+<ul id="taskList"></ul>
+
+</section>
+
+</main>
+
+</div>
+
+<script src="app.js"></script>
+       
 </body>
 </html>
+                
