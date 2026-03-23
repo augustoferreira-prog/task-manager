@@ -1,220 +1,157 @@
-const form = document.getElementById("taskForm");
-const input = document.getElementById("taskInput");
-const list = document.getElementById("tasklist");
-const search = document.getElementById("searchTask");
-const priority = document.getElementById("priority");
-const counter = document.getElementById("taskCounter");
-const toggleTheme = document.getElementById("toggleTheme");
+window.onload = function () {
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  /* ===== ELEMENTOS ===== */
+  const btn = document.getElementById("btn")
+  const form = document.getElementById("taskForm")
+  const input = document.getElementById("taskInput")
+  const list = document.getElementById("taskList")
+  const search = document.getElementById("search")
 
-/* cargar tareas al iniciar*/
+  const totalTasks = document.getElementById("totalTasks")
+  const highTasks = document.getElementById("highTasks")
+  const mediumTasks = document.getElementById("mediumTasks")
+  const lowTasks = document.getElementById("lowTasks")
 
-document.addEventListener("DOMContentLoaded", () => {
+  /* ===== ESTADO ===== */
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || []
 
-    renderTasks();
-    loadTheme();
+  /* ===== MODO OSCURO ===== */
+  function toggleTheme() {
+    document.documentElement.classList.toggle("dark")
 
-});
+    const isDark = document.documentElement.classList.contains("dark")
 
-/*  guardar   */
+    localStorage.setItem("theme", isDark ? "dark" : "light")
+    btn.textContent = isDark ? "☀️" : "🌙"
+  }
 
-function saveTasks(){
+  btn.onclick = toggleTheme
 
-    localStorage.setItem("tasks", JSON.stringify (tasks));    
+  function loadTheme() {
+    const savedTheme = localStorage.getItem("theme")
 
-}
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark")
+      btn.textContent = "☀️"
+    }
+  }
 
-/*___________renderizar___________*/
+  /* ===== STORAGE ===== */
+  function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks))
+  }
 
-function renderTasks(){
+  /* ===== STATS ===== */
+  function updateStats() {
 
-        list.innerHTML= "";
+    totalTasks.textContent = tasks.length
 
-        tasks.forEach(task => {
+    const high = tasks.filter(t => t.priority === "high").length
+    const medium = tasks.filter(t => t.priority === "medium").length
+    const low = tasks.filter(t => t.priority === "low").length
 
-            const li = document.createElement("li");
+    highTasks.textContent = high
+    mediumTasks.textContent = medium
+    lowTasks.textContent = low
+  }
 
-            li.className = "task";
-            
-            if(task.completed){
-            li.classList.add("completed");
-        }
+  /* ===== RENDER ===== */
+  function createTaskElement(task, index) {
 
-        li.innerHTML = ` 
-            <span class="task-text">${task.text}</span>
+    const li = document.createElement("li")
 
-            <span class="badge ${task.priority.tolowerCase()}">
-            ${task,priority}
-            </span>
+    li.className = `
+    flex justify-between items-center 
+    bg-white dark:bg-gray-800 
+    text-gray-800 dark:text-white
+    p-4 rounded-xl shadow mb-3 transition
+    `
 
-            <div class="actions">
-                <button class="complete">✔</button>
-                <button class="delete">🗑</button>
-            </div>
-`;
+    li.innerHTML = `
+    <div>
+      <p class="font-semibold">${task.text}</p>
+      <small class="text-gray-500 dark:text-gray-400">${task.category}</small>
+    </div>
 
-/*     marcar completada     */
+    <span class="px-2 py-1 rounded text-white ${
+      task.priority === "high" ? "bg-red-500" :
+      task.priority === "medium" ? "bg-yellow-400 text-black" :
+      "bg-green-500"
+    }">
+      ${task.priority}
+    </span>
 
-li.querySelector(".complete").addEventListener("click", () => {
-toggleComplete(task.id);
-});
+    <button data-id="${index}"
+    class="bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 transition">
+      ✕
+    </button>
+    `
 
-/*----------eliminar--------*/
+    return li
+  }
 
-li.querySelector(".delete").addEventListener("click", () => {
-deleteTask(task.id);
-});
+  function renderTasks(taskArray = tasks) {
 
-list.appendChild(li);
+    list.innerHTML = ""
 
-});
+    taskArray.forEach((task) => {
+      const index = tasks.indexOf(task)
+      list.appendChild(createTaskElement(task, index))
+    })
 
-updateCounter();
+    updateStats()
+  }
 
-}
-
-/*-------------añadir--------*/
-
-form.addEventListener("submit", (e)=>{
-
-    e.preventDefault();
-
-    const text = input.value.trim();
-
-    if(text === "") return;
+  /* ===== AÑADIR ===== */
+  form.onsubmit = function (e) {
+    e.preventDefault()
 
     const newTask = {
+      text: input.value.trim(),
+      category: document.getElementById("category").value,
+      priority: document.getElementById("priority").value
+    }
 
-        id: Date.now(),
-        text: text,
-        priority: priority.value,
-        completed: false
-    };
+    if (!newTask.text) return
 
-    tasks.push(newTask);
+    tasks.push(newTask)
 
-    saveTasks;
+    saveTasks()
+    renderTasks()
 
-    renderTasks();
+    input.value = ""
+  }
 
-    input.value= "";
+  /* ===== ELIMINAR ===== */
+  list.onclick = function (e) {
 
-});
+    if (e.target.tagName === "BUTTON") {
 
-/*--------completar-------*/
+      const id = e.target.dataset.id
 
-function toggleComplete(id){
+      tasks.splice(id, 1)
 
-    tasks = tasks.map(task => {
+      saveTasks()
+      renderTasks()
+    }
+  }
 
-        if(task.id === id){
-            task.completed = !task.completed;
-        }
+  /* ===== BUSCADOR PRO ===== */
+  search.oninput = function () {
 
-        return task;
-    });
+    const text = search.value.toLowerCase()
 
-    saveTasks();
+    const filtered = tasks.filter(task =>
+      task.text.toLowerCase().includes(text) ||
+      task.category.toLowerCase().includes(text) ||
+      task.priority.toLowerCase().includes(text)
+    )
 
-    renderTasks();
+    renderTasks(filtered)
+  }
+
+  /* ===== INIT ===== */
+  loadTheme()
+  renderTasks()
+
 }
-
-/*--------eliminar--------*/
-
-function deleteTask(id){
-
-    tasks = tasks.filter(task => task.id !== id);
-
-    saveTasks();
-
-    renderTasks();
-}
-
-
-/*--------------buscador-------------*/
-
-search.addEventListener("keyup", () => {
-  
-    const text = search.value.tolowerCase();
-
-    document.querySelectorAll(".task").forEach(task => {
-
-        const content = task
-        .querySelector(".task-text")
-        .textContent
-        .tolowerCase;
-
-        task.style.display =
-        content.includes(text) ? "flex" : "none";
-});
-
-});
-
-
-/*--------------contador-------------------*/
-
-
-function updateCounter(){
-
-    const total = tasks.length;
-
-    const completed = tasks.filter(t => t.completed).length;
-
-    counter.textContent =
-    `Tareas completadas: ${completed} / ${total}`;
-
-    }
-
-
-
-/*--------cargar tema guardado-----------*/
-
-function loadTheme(){
-
-    const toggleTheme = document.getElementById("toggleTheme");
-    
-    const savedTheme = localStorage.getItem("theme");
-
-    if(savedTheme === "dark"){
-
-    document.body.classList.add("dark");    
-    toggleTheme.textContent = "☀️"
-
-    }else{
-
-    document.body.classList.remove("dark");
-    toggleTheme.textContent = "🌙"
-
-    }
-
-    }
-    
-
-    /*--------cambiar tema-----------*/
-
-    function changeTheme(){
-    
-    const darkMode = document.body.classList.toggle("dark");
-
-    if(darkMode){
-
-    localStorage.setItem("theme","dark");
-    toggleTheme.textContent = "☀️";
-
-    }else{
-        
-    localStorage.setItem("theme","light");
-    toggleTheme.textContent = "🌙";
-    
-    }
-
-    }
-
-    /*--------evento botn-----------*/
-
-    toggleTheme.addEventListener("click", changeTheme);
-    
-    document.addEventListener("DOMContentLoaded", loadTheme);
-
-

@@ -1,71 +1,139 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor de Tareas</title>
-    <link rel="stylesheet" href="styles.css"> 
-    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { darkMode: 'class' }
+</script>
+
+<title>TaskFlow,</title>
 </head>
 
-<body>
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 
+dark:from-gray-900 dark:to-black 
+text-gray-800 dark:text-white transition">
 
-<header class="header">
-    
-<h1>📋Gestor de Tareas</h1>
+<!-- HEADER PRO -->
+<header class="p-6 backdrop-blur-md 
+bg-gradient-to-r from-indigo-500/90 to-purple-500/90 
+dark:from-gray-900/90 dark:to-gray-800/90 
+shadow-lg border-b border-white/10">
 
-<button id="toggleTheme">🌙</button>
+<div class="flex items-center justify-between">
 
-</header>
+<!-- BOTÓN -->
+<button id="btn"
+class="px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white transition">
+🌙
+</button>
 
-<div class="container">
+<!-- TÍTULO + SUBTÍTULO -->
+<div class="flex items-baseline gap-4">
 
-<aside class="sidebar">
+<h1 class="text-5xl font-extrabold tracking-wide">
+TaskFlow
+</h1>
 
-<h3>Categorías</h3>
-
-<ul>
-    <li><span>📌</span> Personal</li>
-    <li><span>💼</span> Trabajo</li>
-    <li><span>📚</span> Estudio</li>
-</ul>
-
-</aside>
-
-<main class="main">
-
-<section class="task-panel">
-
-<h2>Mis tareas</h2>
-
-<p id="taskCounter"></p>
-
-<form id="taskForm">
-
-<input type="text" id="taskInput" placeholder="Nueva tarea" required>
-
-<select id="prority">
-<option value="Alta">Alta</option>
-<option value="Media">Media</option>
-<option value="Baja">Baja</option>
-</select>
-
-<button type="submit">Añadir</button>
-
-</form>
-
-<input type=""text" id="searchTask" placeholder="Buscar tarea..."
-
-<ul id="taskList"></ul>
-
-</section>
-
-</main>
+<p class="text-lg opacity-90">
+"Tu diario de gestor de tareas profesional..."
+</p>
 
 </div>
 
+<!-- ESPACIADOR -->
+<div class="w-12"></div>
+
+</div>
+
+</header>
+
+<!-- MAIN -->
+<main class="p-5 grid grid-cols-1 lg:grid-cols-4 gap-5 items-start">
+
+<!-- COLUMNA IZQUIERDA -->
+<div class="lg:col-span-3 flex flex-col gap-5">
+
+  <!-- CONTROLES -->
+  <section class="flex flex-col gap-5">
+
+    <input id="search" type="text" placeholder="Buscar tarea..."
+    class="w-full p-4 rounded-xl shadow bg-white dark:bg-gray-800 dark:text-white">
+
+    <form id="taskForm" class="flex flex-wrap gap-4">
+
+      <input id="taskInput" type="text" placeholder="Nueva tarea..." required
+      class="flex-1 p-4 rounded-xl shadow bg-white dark:bg-gray-800 dark:text-white">
+
+      <select id="category" class="p-4 rounded-xl shadow bg-white dark:bg-gray-800">
+        <option>Personal</option>
+        <option>Trabajo</option>
+        <option>Estudio</option>
+      </select>
+
+      <select id="priority" class="p-4 rounded-xl shadow bg-white dark:bg-gray-800">
+        <option value="low">Baja</option>
+        <option value="medium">Media</option>
+        <option value="high">Alta</option>
+      </select>
+
+      <button type="submit"
+      class="px-6 py-4 rounded-xl bg-indigo-500 text-white shadow hover:scale-105 transition">
+        + Añadir
+      </button>
+
+    </form>
+
+  </section>
+
+  <!-- LISTA -->
+  <section>
+    <ul id="taskList"></ul>
+  </section>
+
+</div>
+
+<!-- SIDEBAR PRO -->
+<aside class="rounded-xl p-5 shadow 
+bg-white/80 dark:bg-gray-800/80 backdrop-blur-md 
+lg:sticky lg:top-5 h-fit">
+
+<h3 class="text-lg font-bold mb-4">Distribución de tareas</h3>
+
+<div class="space-y-3 mb-5">
+
+<div class="flex justify-between">
+<span>Total tareas</span>
+<span id="totalTasks">0</span>
+</div>
+
+<div class="flex justify-between">
+<span>Alta prioridad</span>
+<span id="highTasks">0</span>
+</div>
+
+<div class="flex justify-between">
+<span>Media prioridad</span>
+<span id="mediumTasks">0</span>
+</div>
+
+<div class="flex justify-between">
+<span>Baja prioridad</span>
+<span id="lowTasks">0</span>
+</div>
+
+</div>
+
+<p class="text-sm text-gray-600 dark:text-gray-300">
+Organiza tus tareas de forma eficiente 🚀
+</p>
+
+</aside>
+
+</main>
+
 <script src="app.js"></script>
-       
 </body>
 </html>
-                
