@@ -9,130 +9,145 @@
 tailwind.config = { darkMode: 'class' }
 </script>
 
-<title>TaskFlow,</title>
+<title>TaskFlow</title>
 </head>
 
-<body class="bg-gradient-to-br from-gray-100 to-gray-200 
+<body class="min-h-screen flex flex-col 
+bg-gradient-to-br from-gray-100 to-gray-200 
 dark:from-gray-900 dark:to-black 
-text-gray-800 dark:text-white transition">
+text-gray-800 dark:text-white">
 
-<!-- HEADER PRO -->
+<!-- HEADER -->
 <header class="p-6 backdrop-blur-md 
 bg-gradient-to-r from-indigo-500/90 to-purple-500/90 
-dark:from-gray-900/90 dark:to-gray-800/90 
-shadow-lg border-b border-white/10">
+shadow-lg">
 
-<div class="flex items-center justify-between">
+<div class="max-w-4xl mx-auto flex items-center justify-center relative">
 
-<!-- BOTÓN -->
+<!-- BOTÓN MODO OSCURO -->
 <button id="btn"
-class="px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white transition">
+class="absolute left-0 px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white">
 🌙
 </button>
 
-<!-- TÍTULO + SUBTÍTULO -->
-<div class="flex items-baseline gap-4">
+<!-- TEXTO -->
+<div class="text-center">
 
-<h1 class="text-5xl font-extrabold tracking-wide">
+<h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
 TaskFlow
 </h1>
 
-<p class="text-lg opacity-90">
-"Tu diario de gestor de tareas profesional..."
+<p class="mt-2 text-lg md:text-xl opacity-90">
+Tu diario de gestor de tareas
 </p>
 
 </div>
-
-<!-- ESPACIADOR -->
-<div class="w-12"></div>
 
 </div>
 
 </header>
 
-<!-- MAIN -->
-<main class="p-5 grid grid-cols-1 lg:grid-cols-4 gap-5 items-start">
+<!-- CONTENIDO -->
+<div class="flex flex-1 overflow-hidden">
 
-<!-- COLUMNA IZQUIERDA -->
-<div class="lg:col-span-3 flex flex-col gap-5">
+<!-- SIDEBAR -->
+<aside class="w-full lg:w-80 p-5 
+bg-white/80 dark:bg-gray-800/80 
+backdrop-blur-md border-r border-white/10 
+flex flex-col gap-5">
 
-  <!-- CONTROLES -->
-  <section class="flex flex-col gap-5">
+<h3 class="font-bold">Cuadro de estadísticas</h3>
 
-    <input id="search" type="text" placeholder="Buscar tarea..."
-    class="w-full p-4 rounded-xl shadow bg-white dark:bg-gray-800 dark:text-white">
-
-    <form id="taskForm" class="flex flex-wrap gap-4">
-
-      <input id="taskInput" type="text" placeholder="Nueva tarea..." required
-      class="flex-1 p-4 rounded-xl shadow bg-white dark:bg-gray-800 dark:text-white">
-
-      <select id="category" class="p-4 rounded-xl shadow bg-white dark:bg-gray-800">
-        <option>Personal</option>
-        <option>Trabajo</option>
-        <option>Estudio</option>
-      </select>
-
-      <select id="priority" class="p-4 rounded-xl shadow bg-white dark:bg-gray-800">
-        <option value="low">Baja</option>
-        <option value="medium">Media</option>
-        <option value="high">Alta</option>
-      </select>
-
-      <button type="submit"
-      class="px-6 py-4 rounded-xl bg-indigo-500 text-white shadow hover:scale-105 transition">
-        + Añadir
-      </button>
-
-    </form>
-
-  </section>
-
-  <!-- LISTA -->
-  <section>
-    <ul id="taskList"></ul>
-  </section>
-
+<!-- ESTADÍSTICAS -->
+<div>
+<p>Total: <span id="totalTasks">0</span></p>
+<p>Completadas: <span id="completedTasks">0</span></p>
+<p>Pendientes: <span id="pendingTasks">0</span></p>
 </div>
 
-<!-- SIDEBAR PRO -->
-<aside class="rounded-xl p-5 shadow 
-bg-white/80 dark:bg-gray-800/80 backdrop-blur-md 
-lg:sticky lg:top-5 h-fit">
+<!-- PROGRESO -->
+<div>
+<p class="mb-2 text-sm">Progreso</p>
 
-<h3 class="text-lg font-bold mb-4">Distribución de tareas</h3>
-
-<div class="space-y-3 mb-5">
-
-<div class="flex justify-between">
-<span>Total tareas</span>
-<span id="totalTasks">0</span>
+<div class="w-full bg-gray-300 rounded h-3">
+<div id="progressBar" class="bg-green-500 h-3 rounded" style="width:0%"></div>
 </div>
 
-<div class="flex justify-between">
-<span>Alta prioridad</span>
-<span id="highTasks">0</span>
+<p id="progressText" class="text-sm mt-1">0%</p>
 </div>
 
-<div class="flex justify-between">
-<span>Media prioridad</span>
-<span id="mediumTasks">0</span>
+<!-- FILTROS -->
+<div>
+<button id="filterAll" class="w-full mb-2 p-2 bg-indigo-500 text-white rounded">Todas</button>
+<button id="filterCompleted" class="w-full mb-2 p-2 bg-green-500 text-white rounded">Completadas</button>
+<button id="filterPending" class="w-full p-2 bg-gray-500 text-white rounded">Pendientes</button>
 </div>
-
-<div class="flex justify-between">
-<span>Baja prioridad</span>
-<span id="lowTasks">0</span>
-</div>
-
-</div>
-
-<p class="text-sm text-gray-600 dark:text-gray-300">
-Organiza tus tareas de forma eficiente 🚀
-</p>
 
 </aside>
 
-</main>
+<!-- MAIN -->
+<div class="flex-1 flex flex-col p-5 gap-5 overflow-y-auto">
+
+<!-- ACCIONES -->
+<div class="flex gap-3 flex-wrap">
+
+<button id="completeAll" 
+class="px-4 py-2 bg-green-500 text-white rounded">
+Completar todas
+</button>
+
+<button id="deleteAll" 
+class="px-4 py-2 bg-red-500 text-white rounded">
+Eliminar todas
+</button>
+
+</div>
+
+<!-- BUSCADOR -->
+<input id="search" placeholder="Buscar tarea..."
+class="p-4 rounded bg-white dark:bg-gray-800">
+
+<!-- FORM -->
+<form id="taskForm" class="flex gap-3 flex-wrap">
+
+<input id="taskInput" required placeholder="Nueva tarea..."
+class="flex-1 p-4 rounded bg-white dark:bg-gray-800">
+
+<select id="category" class="p-4 rounded bg-white dark:bg-gray-800">
+<option>Personal</option>
+<option>Trabajo</option>
+<option>Estudio</option>
+</select>
+
+<select id="priority" class="p-4 rounded bg-white dark:bg-gray-800">
+<option value="low">Baja</option>
+<option value="medium">Media</option>
+<option value="high">Alta</option>
+</select>
+
+<button class="px-6 py-4 bg-indigo-500 text-white rounded">
++
+</button>
+
+</form>
+
+<!-- LISTA -->
+<ul id="taskList"></ul>
+
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="text-center py-4 
+bg-white/70 dark:bg-gray-800/70 
+backdrop-blur-md border-t border-white/10">
+
+<p class="text-sm text-gray-600 dark:text-gray-300">
+© <span id="year"></span> Augusto Ferreira — TaskFlow
+</p>
+
+</footer>
 
 <script src="app.js"></script>
 </body>

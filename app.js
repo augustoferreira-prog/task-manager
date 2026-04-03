@@ -8,36 +8,30 @@ window.onload = function () {
   const search = document.getElementById("search")
 
   const totalTasks = document.getElementById("totalTasks")
-  const highTasks = document.getElementById("highTasks")
-  const mediumTasks = document.getElementById("mediumTasks")
-  const lowTasks = document.getElementById("lowTasks")
+  const completedTasks = document.getElementById("completedTasks")
+  const pendingTasks = document.getElementById("pendingTasks")
+
+  const progressBar = document.getElementById("progressBar")
+  const progressText = document.getElementById("progressText")
+
+  const completeAll = document.getElementById("completeAll")
+  const deleteAll = document.getElementById("deleteAll")
+
+  const filterAll = document.getElementById("filterAll")
+  const filterCompleted = document.getElementById("filterCompleted")
+  const filterPending = document.getElementById("filterPending")
 
   /* ===== ESTADO ===== */
   let tasks = JSON.parse(localStorage.getItem("tasks")) || []
 
   /* ===== MODO OSCURO ===== */
-  function toggleTheme() {
-    document.documentElement.classList.toggle("dark")
+  btn.onclick = () => document.documentElement.classList.toggle("dark")
 
-    const isDark = document.documentElement.classList.contains("dark")
-
-    localStorage.setItem("theme", isDark ? "dark" : "light")
-    btn.textContent = isDark ? "☀️" : "🌙"
-  }
-
-  btn.onclick = toggleTheme
-
-  function loadTheme() {
-    const savedTheme = localStorage.getItem("theme")
-
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark")
-      btn.textContent = "☀️"
-    }
-  }
+  /* ===== FOOTER ===== */
+  document.getElementById("year").textContent = new Date().getFullYear()
 
   /* ===== STORAGE ===== */
-  function saveTasks() {
+  function save() {
     localStorage.setItem("tasks", JSON.stringify(tasks))
   }
 
@@ -46,112 +40,145 @@ window.onload = function () {
 
     totalTasks.textContent = tasks.length
 
-    const high = tasks.filter(t => t.priority === "high").length
-    const medium = tasks.filter(t => t.priority === "medium").length
-    const low = tasks.filter(t => t.priority === "low").length
+    const completed = tasks.filter(t => t.completed).length
+    const pending = tasks.length - completed
 
-    highTasks.textContent = high
-    mediumTasks.textContent = medium
-    lowTasks.textContent = low
+    completedTasks.textContent = completed
+    pendingTasks.textContent = pending
+
+    const percent = tasks.length ? Math.round((completed / tasks.length) * 100) : 0
+
+    progressBar.style.width = percent + "%"
+    progressText.textContent = percent + "%"
   }
 
-  /* ===== RENDER ===== */
-  function createTaskElement(task, index) {
+  /* ===== CREAR TAREA (CON PRIORIDAD) ===== */
+  function createTask(task, index) {
 
     const li = document.createElement("li")
 
     li.className = `
-    flex justify-between items-center 
     bg-white dark:bg-gray-800 
-    text-gray-800 dark:text-white
-    p-4 rounded-xl shadow mb-3 transition
+    p-4 rounded mb-3 flex justify-between items-center shadow
     `
 
-    li.innerHTML = `
-    <div>
-      <p class="font-semibold">${task.text}</p>
-      <small class="text-gray-500 dark:text-gray-400">${task.category}</small>
-    </div>
-
-    <span class="px-2 py-1 rounded text-white ${
+    const priorityColor =
       task.priority === "high" ? "bg-red-500" :
       task.priority === "medium" ? "bg-yellow-400 text-black" :
       "bg-green-500"
-    }">
-      ${task.priority}
-    </span>
 
-    <button data-id="${index}"
-    class="bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600 transition">
-      ✕
-    </button>
+    li.innerHTML = `
+      <div class="flex items-center gap-3">
+
+        <input type="checkbox" data-id="${index}" ${task.completed ? "checked" : ""}>
+
+        <div>
+          <p class="font-semibold ${task.completed ? "line-through opacity-50" : ""}">
+            ${task.text}
+          </p>
+
+          <div class="flex gap-2 mt-1">
+
+            <span class="text-xs px-2 py-1 rounded bg-gray-200 dark:bg-gray-700">
+              ${task.category}
+            </span>
+
+            <span class="text-xs px-2 py-1 rounded text-white ${priorityColor}">
+              ${task.priority}
+            </span>
+
+          </div>
+        </div>
+
+      </div>
+
+      <button data-id="${index}" 
+      class="bg-red-500 px-3 py-1 rounded text-white hover:bg-red-600">
+        ✕
+      </button>
     `
 
     return li
   }
 
-  function renderTasks(taskArray = tasks) {
+  /* ===== RENDER ===== */
+  function render(arr = tasks) {
 
     list.innerHTML = ""
 
-    taskArray.forEach((task) => {
-      const index = tasks.indexOf(task)
-      list.appendChild(createTaskElement(task, index))
+    arr.forEach(task => {
+      const i = tasks.indexOf(task)
+      list.appendChild(createTask(task, i))
     })
 
     updateStats()
   }
 
   /* ===== AÑADIR ===== */
-  form.onsubmit = function (e) {
+  form.onsubmit = e => {
     e.preventDefault()
 
-    const newTask = {
-      text: input.value.trim(),
+    tasks.push({
+      text: input.value,
       category: document.getElementById("category").value,
-      priority: document.getElementById("priority").value
-    }
+      priority: document.getElementById("priority").value,
+      completed: false
+    })
 
-    if (!newTask.text) return
-
-    tasks.push(newTask)
-
-    saveTasks()
-    renderTasks()
-
+    save()
+    render()
     input.value = ""
   }
 
-  /* ===== ELIMINAR ===== */
-  list.onclick = function (e) {
+  /* ===== EVENTOS LISTA ===== */
+  list.onclick = e => {
+
+    if (e.target.type === "checkbox") {
+      tasks[e.target.dataset.id].completed = e.target.checked
+    }
 
     if (e.target.tagName === "BUTTON") {
-
-      const id = e.target.dataset.id
-
-      tasks.splice(id, 1)
-
-      saveTasks()
-      renderTasks()
+      tasks.splice(e.target.dataset.id, 1)
     }
+
+    save()
+    render()
   }
 
-  /* ===== BUSCADOR PRO ===== */
-  search.oninput = function () {
+  /* ===== BOTONES ===== */
+  completeAll.onclick = () => {
+    tasks.forEach(t => t.completed = true)
+    save()
+    render()
+  }
 
-    const text = search.value.toLowerCase()
+  deleteAll.onclick = () => {
+    tasks = []
+    save()
+    render()
+  }
 
-    const filtered = tasks.filter(task =>
-      task.text.toLowerCase().includes(text) ||
-      task.category.toLowerCase().includes(text) ||
-      task.priority.toLowerCase().includes(text)
-    )
+  /* ===== FILTROS ===== */
+  filterAll.onclick = () => render(tasks)
 
-    renderTasks(filtered)
+  filterCompleted.onclick = () =>
+    render(tasks.filter(t => t.completed))
+
+  filterPending.onclick = () =>
+    render(tasks.filter(t => !t.completed))
+
+  /* ===== BUSCADOR ===== */
+  search.oninput = () => {
+    const t = search.value.toLowerCase()
+
+    render(tasks.filter(task =>
+      task.text.toLowerCase().includes(t) ||
+      task.category.toLowerCase().includes(t) ||
+      task.priority.toLowerCase().includes(t)
+    ))
   }
 
   /* ===== INIT ===== */
-  loadTheme()
-  renderTasks()
+  render()
 
 }
